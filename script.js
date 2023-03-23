@@ -38,48 +38,6 @@ document.addEventListener("keydown", function (e) {
   }
 });
 
-// Create and insert the cookie message
-const cookieEl = document.createElement("div");
-cookieEl.classList.add("cookie-message");
-cookieEl.innerHTML = `We use cookies for improved functionality and analytics.
-<button class="btn btn--close-cookie">Got it!</button>
-`;
-
-header.prepend(cookieEl);
-
-const btnCloseCookieMessage = document.querySelector(".btn--close-cookie");
-
-btnCloseCookieMessage.addEventListener("click", function () {
-  cookieEl.remove();
-});
-
-cookieEl.style.height =
-  parseFloat(getComputedStyle(cookieEl).height) + 50 + "px";
-
-// Smooth scrolling
-btnScrollTo.addEventListener("click", function (e) {
-  const s1Coords = section1.getBoundingClientRect();
-  // console.log(e.target.getBoundingClientRect());
-
-  // console.log(window.scrollX, window.scrollY);
-
-  console
-    .log
-    // document.documentElement.clientHeight,
-    // document.documentElement.clientWidth
-    ();
-
-  // console.log(s1Coords.left, s1Coords.top);
-
-  // window.scrollTo({
-  //   left: s1Coords.left + window.scrollX,
-  //   top: s1Coords.top + window.scrollY,
-  //   behavior: "smooth",
-  // });
-
-  // section1.scrollIntoView({ behavior: "smooth" });
-});
-
 // Event Delegation
 document.querySelector(".nav__links").addEventListener("click", function (e) {
   e.preventDefault();
@@ -133,3 +91,24 @@ const fadeAnimation = function (e) {
 
 nav.addEventListener("mouseover", fadeAnimation.bind(0.5));
 nav.addEventListener("mouseout", fadeAnimation.bind(1));
+
+// Sticky navigation
+const navHeight = nav.getBoundingClientRect().height;
+const stickyNav = function (entries, headerObserver) {
+  const [entry] = entries;
+
+  if (!entry.isIntersecting) {
+    nav.classList.add("sticky");
+  } else {
+    nav.classList.remove("sticky");
+  }
+};
+
+const options = {
+  root: null,
+  threshold: 0,
+  rootMargin: `-${navHeight}px`,
+};
+
+const headerObserver = new IntersectionObserver(stickyNav, options);
+headerObserver.observe(header);
