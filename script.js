@@ -104,11 +104,36 @@ const stickyNav = function (entries, headerObserver) {
   }
 };
 
-const options = {
+const stickyNavOptions = {
   root: null,
   threshold: 0,
   rootMargin: `-${navHeight}px`,
 };
 
-const headerObserver = new IntersectionObserver(stickyNav, options);
+const headerObserver = new IntersectionObserver(stickyNav, stickyNavOptions);
 headerObserver.observe(header);
+
+// Reveal sections
+const revealSection = function (entries, observer) {
+  const [entry] = entries;
+
+  if (!entry.isIntersecting) return;
+
+  entry.target.classList.remove("section--hidden");
+  observer.unobserve(entry.target);
+};
+
+const revealSectionOptions = {
+  root: null,
+  threshold: 0.15,
+};
+
+const sectionObserver = new IntersectionObserver(
+  revealSection,
+  revealSectionOptions
+);
+
+allSections.forEach((section) => {
+  sectionObserver.observe(section);
+  section.classList.add("section--hidden");
+});
